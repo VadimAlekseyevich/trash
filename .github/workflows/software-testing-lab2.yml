@@ -1,0 +1,32 @@
+name: Software testing - JUnit 4 (Lab 2)
+on:
+  push:
+    paths:
+      - 'software_testing/lab_02_junit/**'
+      - '.github/workflows/software-testing-lab2.yml'
+  workflow_dispatch:
+jobs:
+  junit4:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: software_testing/lab_02_junit
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: software_testing/lab_02_junit/pom.xml
+      - name: Run JUnit4 tests and capture event log
+        run: bash run_tests.sh
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab2-junit4-test-results
+          path: |
+            software_testing/lab_02_junit/target/surefire-reports/
+            software_testing/lab_02_junit/target/junit-events.log
+          if-no-files-found: warn
