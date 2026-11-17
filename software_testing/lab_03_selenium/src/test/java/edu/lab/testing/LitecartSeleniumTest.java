@@ -1,7 +1,5 @@
 package edu.lab.testing;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -16,7 +14,6 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -28,30 +25,10 @@ class LitecartSeleniumTest {
     private static final String EXPECTED_TITLE = "Purple Duck | Rubber Ducks | My Store";
     private static final Duration TIMEOUT = Duration.ofSeconds(15);
 
-    private static DemoLitecartServer demoSite;
-    private static String siteUrl;
-
-    @BeforeAll
-    static void startSite() throws IOException {
-        String requestedUrl = System.getProperty("siteUrl", "demo").trim();
-        if ("demo".equalsIgnoreCase(requestedUrl)) {
-            demoSite = DemoLitecartServer.start();
-            siteUrl = demoSite.url();
-            System.out.println("Local demo (not real Litecart): " + siteUrl);
-        } else if (requestedUrl.startsWith("http://") || requestedUrl.startsWith("https://")) {
-            siteUrl = requestedUrl.endsWith("/") ? requestedUrl : requestedUrl + "/";
-            System.out.println("External Litecart: " + siteUrl);
-        } else {
-            throw new IllegalArgumentException("siteUrl must be 'demo' or an HTTP(S) URL");
-        }
-    }
-
-    @AfterAll
-    static void stopSite() {
-        if (demoSite != null) {
-            demoSite.close();
-        }
-    }
+    // The tests always use a real, already installed Litecart site.
+    // Default port 8080 matches this Windows/XAMPP setup; override via -DsiteUrl.
+    private static final String SITE_URL =
+            System.getProperty("siteUrl", "http://localhost:8080/litecart/");
 
     @Test
     @DisplayName("Chrome: открыть товар Purple Duck")
@@ -84,7 +61,8 @@ class LitecartSeleniumTest {
 
     private static void verifyPurpleDuck(WebDriver driver, String browser) {
         try {
-            driver.get(siteUrl);
+            System.out.println("Testing real Litecart: " + SITE_URL);
+            driver.get(SITE_URL);
             WebDriverWait wait = new WebDriverWait(driver, TIMEOUT);
             WebElement product = wait.until(
                     ExpectedConditions.elementToBeClickable(By.partialLinkText("Purple Duck")));

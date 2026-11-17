@@ -1,4 +1,4 @@
-name: Lab 03 - Selenium Chrome and Firefox
+name: Lab 03 - Compile Selenium tests
 
 on:
   push:
@@ -10,28 +10,18 @@ on:
       - 'software_testing/lab_03_selenium/**'
       - '.github/workflows/lab03-selenium.yml'
 
+# Browser tests target an actual Litecart installed on the student's computer.
+# GitHub runners cannot reach that localhost site, so CI only compiles the project.
 jobs:
-  selenium:
-    runs-on: ubuntu-latest
+  compile:
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
-          cache: maven
-          cache-dependency-path: software_testing/lab_03_selenium/pom.xml
-      - uses: browser-actions/setup-chrome@v1
-      - uses: browser-actions/setup-firefox@v1
-      - name: Run Chrome and Firefox tests
+      - name: Compile Selenium tests using the Maven Wrapper
         working-directory: software_testing/lab_03_selenium
-        run: mvn -B -Dheadless=true test
-      - name: Upload screenshots and test results
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: lab03-selenium-results
-          path: |
-            software_testing/lab_03_selenium/target/screenshots/
-            software_testing/lab_03_selenium/target/surefire-reports/
-          if-no-files-found: warn
+        shell: pwsh
+        run: .\mvnw.cmd -B -DskipTests test
