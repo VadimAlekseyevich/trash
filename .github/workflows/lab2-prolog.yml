@@ -3,7 +3,7 @@ name: Lab 02 - Prolog expert system
 on:
   push:
     paths:
-      - "lab_02_tourism_expert_system/**"
+      - "artificial_intelligence/lab_02_tourism_expert_system/**"
       - ".github/workflows/lab2-prolog.yml"
   workflow_dispatch:
 
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: lab_02_tourism_expert_system
+        working-directory: artificial_intelligence/lab_02_tourism_expert_system
     steps:
       - uses: actions/checkout@v4
       - name: Install SWI-Prolog

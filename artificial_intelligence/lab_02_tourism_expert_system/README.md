@@ -23,14 +23,14 @@
 Вставьте **одну строку** в CMD (она установит SWI-Prolog, скачает один файл программы с GitHub и запустит опрос):
 
 ```cmd
-winget install --id SWI-Prolog.SWI-Prolog --exact --accept-package-agreements --accept-source-agreements && cd /d "%USERPROFILE%" && curl.exe -fL -o lab2_tourism.pl https://raw.githubusercontent.com/VadimAlekseyevich/trach/main/lab_02_tourism_expert_system/main.pl && chcp 65001 >nul && "%ProgramFiles%\swipl\bin\swipl.exe" -q -s lab2_tourism.pl -g main -t halt
+winget install --id SWI-Prolog.SWI-Prolog --exact --accept-package-agreements --accept-source-agreements && cd /d "%USERPROFILE%" && curl.exe -fL -o lab2_tourism.pl https://raw.githubusercontent.com/VadimAlekseyevich/trash/main/artificial_intelligence/lab_02_tourism_expert_system/main.pl && chcp 65001 >nul && "%ProgramFiles%\swipl\bin\swipl.exe" -q -s lab2_tourism.pl -g main -t halt
 ```
 
 Если SWI-Prolog уже стоит, начните со второго фрагмента (`cd /d ...`). При установке программа может запросить подтверждение прав. Если ваш установщик выбрал нестандартный каталог, замените `%ProgramFiles%\swipl\bin\swipl.exe` фактическим путем к `swipl.exe`.
 
 ## Запуск из папки проекта
 
-Если репозиторий уже скачан, откройте CMD в `lab_02_tourism_expert_system` и выполните:
+Если репозиторий уже скачан, откройте CMD в `artificial_intelligence/lab_02_tourism_expert_system` и выполните:
 
 ```cmd
 chcp 65001
