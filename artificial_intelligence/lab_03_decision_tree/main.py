@@ -282,8 +282,8 @@ def plot_regions(tree: Node, samples: list[Penguin], features: tuple[str, ...], 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="ЛР №3 — собственное дерево решений (Palmer penguins)")
-    parser.add_argument("--variant", type=int, choices=sorted(VARIANTS), default=1,
-                        help="Номер варианта из таблицы 1 методички (по умолчанию 1)")
+    parser.add_argument("--variant", type=int, choices=sorted(VARIANTS), default=2,
+                        help="Номер варианта из таблицы 1 методички (по умолчанию 2: плавник и масса)")
     parser.add_argument("--data", type=Path, default=Path(__file__).with_name("penguins.csv"))
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).with_name("output"))
     parser.add_argument("--no-plots", action="store_true", help="Не сохранять PNG-графики")

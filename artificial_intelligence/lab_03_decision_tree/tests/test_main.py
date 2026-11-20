@@ -1,5 +1,8 @@
 """Небольшие автоматические проверки собственного алгоритма дерева решений."""
 
+import csv
+import json
+import subprocess
 import tempfile
 import unittest
 from collections import Counter
@@ -12,6 +15,29 @@ from main import (Penguin, SPECIES, VARIANTS, build_tree, evaluate, find_best_sp
 
 
 class DecisionTreeTests(unittest.TestCase):
+    def test_variant_two_is_default_in_cli(self):
+        """Запуск без --variant должен обучать по плавнику и массе тела."""
+        project_dir = Path(__file__).resolve().parents[1]
+        self.assertEqual(VARIANTS[2], ("flipper_length_mm", "body_mass_g"))
+        with tempfile.TemporaryDirectory() as tmp:
+            output = Path(tmp)
+            run = subprocess.run(
+                [sys.executable, str(project_dir / "main.py"), "--no-plots",
+                 "--output-dir", str(output)],
+                check=True, capture_output=True, text=True,
+            )
+            self.assertIn("Вариант 2", run.stdout)
+            metrics = json.loads((output / "metrics.json").read_text(encoding="utf-8"))
+            self.assertEqual(metrics["variant"], 2)
+            self.assertEqual(metrics["features"], list(VARIANTS[2]))
+            self.assertEqual(metrics["sample_count"], 342)
+            self.assertEqual(metrics["excluded_na"], 2)
+            with (output / "predictions.csv").open(encoding="utf-8", newline="") as file:
+                header = next(csv.reader(file))
+            self.assertEqual(header[-2:], list(VARIANTS[2]))
+            self.assertNotIn("bill_length_mm", header)
+            self.assertNotIn("bill_depth_mm", header)
+
     def test_gini(self):
         self.assertEqual(gini(Counter({"Adelie": 5})), 0.0)
         self.assertAlmostEqual(gini(Counter({"Adelie": 1, "Gentoo": 1})), 0.5)
